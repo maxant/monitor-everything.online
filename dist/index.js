@@ -27610,7 +27610,13 @@ const exec = __nccwpck_require__(1036)
 
 const core = __nccwpck_require__(364)
 
-exec(core, '.monitor-everything-online.json', 'https://sre.maxant.ch')
+exec(core, '.monitor-everything-online.json', 'https://sre.maxant.ch').then((debug) => {
+    console.log('promise resolved')
+}).catch((error) => {
+    console.log('promise rejected')
+})
+
+console.log('done')
 
 module.exports = __webpack_exports__;
 /******/ })()
