@@ -7,11 +7,16 @@
 const fs = __nccwpck_require__(9896)
 const httpm = __nccwpck_require__(4396)
 
-async function exec(core, contextFilename, baseUrl) {
+async function exec(core, baseUrl) {
     const debug = {}
+    let contextFilename = '.monitor-everything-online.json'
     try {
         const token = core.getInput('token')
         const command = core.getInput('command')
+        const folderToStoreStateIn = core.getInput('folderToStoreStateIn')
+        if(folderToStoreStateIn) {
+            contextFilename = folderToStoreStateIn + "/" + contextFilename
+        }
         console.log(`Running command '${command}'...`)
         if(command === "BUILD_STARTED") {
             let now = new Date().getTime()
@@ -27610,7 +27615,7 @@ const exec = __nccwpck_require__(1036)
 
 const core = __nccwpck_require__(364)
 
-exec(core, '.monitor-everything-online.json', 'https://sre.maxant.ch').then((debug) => {
+exec(core, 'https://sre.maxant.ch').then(() => {
     console.log('all done')
     process.exit(0)
 }).catch((error) => {

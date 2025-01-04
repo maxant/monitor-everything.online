@@ -1,25 +1,27 @@
 // https://jestjs.io/docs/getting-started
+
 const fs = require('fs')
 const http = require("http");
 
 const exec = require('./action')
 
+const contextFilename = '/tmp/.monitor-everything-online.json'
+
 test('BUILD_STARTED and BUILD_COMPLETED', async () => {
 
     // given
-    const contextFilename = '/tmp/.monitor-everything-online.json'
     const host = 'localhost'
     const port = 9996
     const baseUrl = 'http://' + host + ':' + port
 
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
     
     // when BUILD_STARTED
-    let debug = await exec(core, contextFilename, baseUrl)
+    let debug = await exec(core, baseUrl)
 
     // then
     expect(debug.allGood).toBe(true)
@@ -36,7 +38,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
 
     // given BUILD_COMPLETED
     core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -54,7 +56,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     })
 
     // when BUILD_COMPLETED
-    debug = await exec(core, contextFilename, baseUrl)
+    debug = await exec(core, baseUrl)
     
     mockServer.close();
     setImmediate(function(){mockServer.emit('close')});
@@ -71,19 +73,18 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
 test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
 
     // given
-    const contextFilename = '/tmp/.monitor-everything-online.json'
     const host = 'localhost'
     const port = 9996
     const baseUrl = 'http://' + host + ':' + port
 
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
     
     // when BUILD_STARTED
-    let debug = await exec(core, contextFilename, baseUrl)
+    let debug = await exec(core, baseUrl)
 
     // then
     expect(debug.allGood).toBe(true)
@@ -100,7 +101,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
 
     // given BUILD_COMPLETED
     core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -118,7 +119,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
     })
 
     // when BUILD_COMPLETED
-    debug = await exec(core, contextFilename, baseUrl)
+    debug = await exec(core, baseUrl)
     
     mockServer.close();
     setImmediate(function(){mockServer.emit('close')});
@@ -135,10 +136,8 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
 test('BUILD_COMPLETED but corrupt context file', async () => {
 
     // given
-    const contextFilename = '/tmp/.monitor-everything-online.json'
-
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -147,7 +146,7 @@ test('BUILD_COMPLETED but corrupt context file', async () => {
     fs.writeFileSync(contextFilename, data)
     
     // when BUILD_STARTED
-    let debug = await exec(core, contextFilename)
+    let debug = await exec(core)
 
     // then
     expect(debug.allGood).toBeFalsy()
@@ -160,10 +159,8 @@ test('BUILD_COMPLETED but corrupt context file', async () => {
 test('BUILD_COMPLETED but missing context file', async () => {
 
     // given
-    const contextFilename = '/tmp/.monitor-everything-online.json'
-
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -172,7 +169,7 @@ test('BUILD_COMPLETED but missing context file', async () => {
     fs.unlinkSync(contextFilename)
 
     // when
-    debug = await exec(core, contextFilename)
+    debug = await exec(core)
     
     // then
     expect(debug.allGood).toBeFalsy()
@@ -208,7 +205,7 @@ test('MEOE-003 Unknown command', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('UNKNOWN_COMMAND'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('UNKNOWN_COMMAND').mockReturnValueOnce('/tmp'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }

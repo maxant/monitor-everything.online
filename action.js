@@ -1,11 +1,16 @@
 const fs = require('fs')
 const httpm = require('@actions/http-client')
 
-async function exec(core, contextFilename, baseUrl) {
+async function exec(core, baseUrl) {
     const debug = {}
+    let contextFilename = '.monitor-everything-online.json'
     try {
         const token = core.getInput('token')
         const command = core.getInput('command')
+        const folderToStoreStateIn = core.getInput('folderToStoreStateIn')
+        if(folderToStoreStateIn) {
+            contextFilename = folderToStoreStateIn + "/" + contextFilename
+        }
         console.log(`Running command '${command}'...`)
         if(command === "BUILD_STARTED") {
             let now = new Date().getTime()

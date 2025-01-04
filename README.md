@@ -27,7 +27,7 @@ the action will result in an error, as it is not able to communicate securely wi
     steps:
 
       - name: record_start_of_build
-        uses: maxant/monitor-everything.online@v0.0.7
+        uses: maxant/monitor-everything.online@v0.0.8
         with:
           command: BUILD_STARTED
 
@@ -35,7 +35,7 @@ the action will result in an error, as it is not able to communicate securely wi
 
       # final build step - record the time taken by the build
       - name: record_end_of_successful_build
-        uses: maxant/monitor-everything.online@v0.0.7
+        uses: maxant/monitor-everything.online@v0.0.8
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_COMPLETED
