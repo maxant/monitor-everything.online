@@ -2,7 +2,7 @@
 const fs = require('fs')
 const http = require("http");
 
-const exec = require('./index')
+const exec = require('./action')
 
 test('BUILD_STARTED and BUILD_COMPLETED', async () => {
 

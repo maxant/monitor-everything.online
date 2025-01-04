@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 8520:
+/***/ 1036:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const fs = __nccwpck_require__(9896)
@@ -58,13 +58,7 @@ async function exec(core, contextFilename, baseUrl) {
 }
 
 module.exports = exec
-if(process.argv.length === 2 && process.argv[0].indexOf("node") >= 0 && process.argv[1].indexOf("jest") >= 0) {
-    // skip actually running, because we are running in jest
-} else {
-    const core = __nccwpck_require__(364)
-    const contextFilename = '.monitor-everything-online.json'
-    exec(core, contextFilename, 'https://sre.maxant.ch')
-}
+
 
 // Get the JSON webhook payload for the event that triggered the workflow
 // const github = require('@actions/github')
@@ -27611,12 +27605,13 @@ module.exports = parseParams
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(8520);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+const exec = __nccwpck_require__(1036)
+
+const core = __nccwpck_require__(364)
+
+exec(core, '.monitor-everything-online.json', 'https://sre.maxant.ch')
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
