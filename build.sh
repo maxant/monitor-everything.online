@@ -1,6 +1,9 @@
 #!/bin/bash
 # call like this: ./build.sh "...commit message..." "v0.0.1"
 
+# fail completely if anything fails
+set -e
+
 ncc build index.js --license licenses.txt
 
 git add --all
