@@ -27,7 +27,7 @@ the action will result in an error, as it is not able to communicate securely wi
     steps:
 
       - name: record_start_of_build
-        uses: maxant/monitor-everything.online@v0.0.3
+        uses: maxant/monitor-everything.online@v0.0.4
         with:
           command: BUILD_STARTED
 
@@ -35,7 +35,7 @@ the action will result in an error, as it is not able to communicate securely wi
 
       # final build step - record the time taken by the build
       - name: record_end_of_successful_build
-        uses: maxant/monitor-everything.online@v0.0.3
+        uses: maxant/monitor-everything.online@v0.0.4
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_COMPLETED
@@ -44,7 +44,7 @@ the action will result in an error, as it is not able to communicate securely wi
 
 # Errors
 
-- `MEOE-001 Missing context.starttime` - if this occurs, there is probably a bug in the action, please create an issue describing how you use the action so that we can investigate the cause.
+- `MEOE-001 Missing context.startTime` - if this occurs, there is probably a bug in the action, please create an issue describing how you use the action so that we can investigate the cause.
 
 - `MEOE-002 Missing context file ${contextFilename} - did you forget to run this action with the command 'BUILD_STARTED'?` - if this occurs, please ensure that you have called the action with the command 'BUILD_STARTED' in the same job as calling the action with the command 'BUILD_COMPLETED'.
 - `MEOE-003 Unknown command ${command}` - This happens if you are calling the action with an unknown command. Please read about the supported commands above in the "inputs" section.

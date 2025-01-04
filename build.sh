@@ -4,6 +4,8 @@
 # fail completely if anything fails
 set -e
 
+npm run test
+
 ncc build index.js --license licenses.txt
 
 git add --all

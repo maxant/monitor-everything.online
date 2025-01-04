@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_DEBUG=http jest || echo 'Failed. View coverage report at coverage/index.html'"
   },
   "keywords": [],
   "author": "",
@@ -11,6 +11,22 @@
   "description": "",
   "dependencies": {
     "@actions/core": "^1.11.1",
-    "@actions/github": "^6.0.0"
+    "@actions/github": "^6.0.0",
+    "@actions/http-client": "^2.2.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": ["json", "lcov", "text", "html"],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   }
 }

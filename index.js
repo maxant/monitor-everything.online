@@ -1,37 +1,66 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const fs = require('fs');
+const fs = require('fs')
+const httpm = require('@actions/http-client')
 
-const contextFilename = '.monitor-everything-online.json';
+async function exec(core, contextFilename, baseUrl) {
+    const debug = {}
+    try {
+        const token = core.getInput('token')
+        const command = core.getInput('command')
+        console.log(`Running command '${command}'...`)
+        if(command === "BUILD_STARTED") {
+            let now = new Date().getTime()
+            let ctx = { startTime: now }
+            let data = JSON.stringify(ctx)
+            fs.writeFileSync(contextFilename, data)
+            console.log(`Persisted startTime ${now}`)
+            debug.ctx = ctx
+            debug.allGood = true
+        } else if(command === "BUILD_COMPLETED") {
+            if (fs.existsSync(contextFilename)) {
+                let now = new Date().getTime()
+                let rawdata = fs.readFileSync(contextFilename)
+                let context= JSON.parse(rawdata)
+                if(!context.startTime) {
+                    core.setFailed("MEOE-001 Missing context.startTime")
+                } else {
+                    let timeTaken = now - context.startTime
+                    debug.timeTaken = timeTaken
+                    console.log(`Build time was ${timeTaken}ms`)
 
-try {
-  const token = core.getInput('token');
-  const command = core.getInput('command');
-  console.log(`Running command ${command}...`);
-  if(command === "BUILD_STARTED") {
-    let time = (new Date()).toISOString();
-    let data = JSON.stringify({starttime: time});
-    fs.writeFileSync(contextFilename, data);
-    console.log(`Persisted starttime ${time}`);
-  } else if(command === "BUILD_COMPLETED") {
-    if (fs.existsSync(contextFilename)) {
-        let rawdata = fs.readFileSync(contextFilename);
-        let context= JSON.parse(rawdata);
-        if(!context.starttime) {
-            core.setFailed("MEOE-001 Missing context.starttime");
+                    // examples: https://github.com/actions/toolkit/tree/main/packages/http-client/__tests__
+                    let http = new httpm.HttpClient()
+                    let url = `${baseUrl}/build-time/${token}?timeTaken=${timeTaken}`
+                    let res = await http.post(url)
+                    if(res.message.statusCode === 200) {
+                        console.log(`Posted build time to ${baseUrl}`)
+                        debug.allGood = true
+                    } else {
+                        let body = await res.readBody()
+                        core.setFailed(`MEOE-005 Failed to POST build time to ${url}, status code was ${res.message.statusCode}, body was ${body}`)
+                    }
+                }
+            } else {
+                core.setFailed(`MEOE-002 Missing context file ${contextFilename} - did you forget to run this action with the command 'BUILD_STARTED'?`)
+            }
         } else {
-            console.log(`TODO got starttime ${ctx.starttime}!`);
+            core.setFailed(`MEOE-003 Unknown command ${command}`)
         }
-    } else {
-        core.setFailed("MEOE-002 Missing context file ${contextFilename} - did you forget to run this action with the command 'BUILD_STARTED'?");
+    } catch (error) {
+        core.setFailed(`MEOE-004 General error: ${error.message}`)
     }
-  } else {
-    core.setFailed(`MEOE-003 Unknown command ${command}`);
-  }
-} catch (error) {
-  core.setFailed("MEOE-004 General error: " + error.message);
+    return debug
+}
+
+module.exports = exec
+if(process.argv.length === 2 && process.argv[0].indexOf("node") >= 0 && process.argv[1].indexOf("jest") >= 0) {
+    // skip actually running, because we are running in jest
+} else {
+    const core = require('@actions/core')
+    const contextFilename = '.monitor-everything-online.json'
+    exec(core, contextFilename, 'https://sre.maxant.ch')
 }
 
 // Get the JSON webhook payload for the event that triggered the workflow
+// const github = require('@actions/github')
 // const payload = JSON.stringify(github.context.payload, undefined, 2)
-// console.log(`The event payload: ${payload}`);
+// console.log(`The event payload: ${payload}`)
