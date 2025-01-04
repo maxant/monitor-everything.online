@@ -27611,12 +27611,12 @@ const exec = __nccwpck_require__(1036)
 const core = __nccwpck_require__(364)
 
 exec(core, '.monitor-everything-online.json', 'https://sre.maxant.ch').then((debug) => {
-    console.log('promise resolved')
+    console.log('all done')
+    process.exit(0)
 }).catch((error) => {
-    console.log('promise rejected')
+    console.log('error: ' + error)
+    process.exit(1)
 })
-
-console.log('done')
 
 module.exports = __webpack_exports__;
 /******/ })()

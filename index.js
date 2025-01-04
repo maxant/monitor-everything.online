@@ -3,9 +3,9 @@ const exec = require('./action')
 const core = require('@actions/core')
 
 exec(core, '.monitor-everything-online.json', 'https://sre.maxant.ch').then((debug) => {
-    console.log('promise resolved')
+    console.log('all done')
+    process.exit(0)
 }).catch((error) => {
-    console.log('promise rejected')
+    console.log('error: ' + error)
+    process.exit(1)
 })
-
-console.log('done')
