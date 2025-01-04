@@ -32,7 +32,7 @@ async function exec(core, baseUrl) {
                 let rawdata = fs.readFileSync(contextFilename)
                 let context= JSON.parse(rawdata)
                 if(!context.startTime) {
-                    core.setFailed("MEOE-001 Missing context.startTime")
+                    setFailed(debug, core, "MEOE-001 Missing context.startTime")
                 } else {
                     let timeTaken = now - context.startTime
                     debug.timeTaken = timeTaken
@@ -47,19 +47,25 @@ async function exec(core, baseUrl) {
                         debug.allGood = true
                     } else {
                         let body = await res.readBody()
-                        core.setFailed(`MEOE-005 Failed to POST build time to ${url}, status code was ${res.message.statusCode}, body was ${body}`)
+                        setFailed(debug, core, `MEOE-005 Failed to POST build time to ${url}, status code was ${res.message.statusCode}, body was ${body}`)
                     }
                 }
             } else {
-                core.setFailed(`MEOE-002 Missing context file ${contextFilename} - did you forget to run this action with the command 'BUILD_STARTED'?`)
+                setFailed(debug, core, `MEOE-002 Missing context file ${contextFilename} - did you forget to run this action with the command 'BUILD_STARTED'?`)
             }
         } else {
-            core.setFailed(`MEOE-003 Unknown command ${command}`)
+            setFailed(debug, core, `MEOE-003 Unknown command ${command}`)
         }
     } catch (error) {
-        core.setFailed(`MEOE-004 General error: ${error.message}`)
+        setFailed(debug, core, `MEOE-004 General error: ${error.message}`)
     }
     return debug
+}
+
+function setFailed(debug, core, msg) {
+    core.setFailed(msg)
+    debug.error = msg
+    debug.allGood = false
 }
 
 module.exports = exec
@@ -27615,9 +27621,14 @@ const exec = __nccwpck_require__(1036)
 
 const core = __nccwpck_require__(364)
 
-exec(core, 'https://sre.maxant.ch').then(() => {
-    console.log('all done')
-    process.exit(0)
+exec(core, 'https://sre.maxant.ch').then((debug) => {
+    if(!debug.allGood) {
+        console.log('An error occurred. ' + JSON.stringify(debug))
+        process.exit(1)
+    } else {
+        console.log('all done')
+        process.exit(0)
+    }
 }).catch((error) => {
     console.log('error: ' + error)
     process.exit(1)

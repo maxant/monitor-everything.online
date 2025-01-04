@@ -21,13 +21,18 @@ the action will result in an error, as it is not able to communicate securely wi
 
 - `CHANGE_DEPLOYED_TO_PROD` - is used to measure the number of deployments, but also to mark the end of a "lead time for change" measurement. Can be called multiple times for the same change, which simply causes the measured time to be extended. Requires that the `token` input is set.
 
+### `folderToStoreStateIn`
+
+This action needs to store state in a file. That file needs to be present later during the job, and perhaps even when a
+second job runs. Use this input parameter to name a folder that survives jobs.
+
 # Example usage
 
 ```yaml
     steps:
 
       - name: record_start_of_build
-        uses: maxant/monitor-everything.online@v0.0.8
+        uses: maxant/monitor-everything.online@v0.0.9
         with:
           command: BUILD_STARTED
 
@@ -35,7 +40,7 @@ the action will result in an error, as it is not able to communicate securely wi
 
       # final build step - record the time taken by the build
       - name: record_end_of_successful_build
-        uses: maxant/monitor-everything.online@v0.0.8
+        uses: maxant/monitor-everything.online@v0.0.9
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_COMPLETED
