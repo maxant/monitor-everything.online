@@ -8,7 +8,10 @@ inputs:
   command:
     description: 'What to do. One of BUILD_STARTED, BUILD_COMPLETED, CHANGE_COMMITED, CHANGE_DEPLOYED_TO_PROD'
     required: true
-    default: 'INITIALISE'
+    default: 'BUILD_STARTED'
+  context:
+    description: 'A map of command specific inputs, see README.md for more info'
+    required: false
 outputs:
   output:
     description: 'The output of the command, can be passed to other commands'
