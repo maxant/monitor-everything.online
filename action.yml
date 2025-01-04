@@ -1,0 +1,17 @@
+name: 'monitor everything online'
+description: 'An action that allows you to integrate your builds with https://monitor-everything.online'
+inputs:
+  token:
+    description: 'A secret API token from monitor-everything.online'
+    required: true
+    default: 'World'
+  command:
+    description: 'What to do. One of BUILD_STARTED, BUILD_COMPLETED, CHANGE_COMMITED, CHANGE_DEPLOYED_TO_PROD'
+    required: true
+    default: 'INITIALISE'
+outputs:
+  output:
+    description: 'The output of the command, can be passed to other commands'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
