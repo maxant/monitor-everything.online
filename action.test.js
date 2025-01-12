@@ -70,6 +70,36 @@ console.log(">>>>>>>> HERE " + JSON.stringify(debug))
     expect(callToMockServer).toMatch(new RegExp('^POST /build-time/test-app\\?timeTaken=[0-9]+$'))
 })
 
+test('BUILD_STARTED no folderToStoreStateIn provided', async () => {
+
+    fs.rmSync(".monitor-everything-online.json")
+    try {
+        let core = {
+            getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED'),
+            setOutput: jest.fn(),
+            setFailed: jest.fn(),
+        }
+        
+        // when BUILD_STARTED
+        let debug = await exec(core)
+    
+        // then
+        expect(debug.allGood).toBe(true)
+    
+        let rawdata = fs.readFileSync(".monitor-everything-online.json")
+        let context= JSON.parse(rawdata)
+    
+        let now = new Date().getTime()
+        expect(context.startTime).toBeLessThanOrEqual(now)
+        expect(context.startTime).toBeGreaterThanOrEqual(now-50)
+        expect(debug.ctx.startTime).toBe(context.startTime)
+        expect(core.setOutput.mock.calls.length).toBe(0)
+        expect(core.setFailed.mock.calls.length).toBe(0)
+    } finally {
+        fs.rmSync(".monitor-everything-online.json")
+    }
+})
+
 test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
 
     // given
