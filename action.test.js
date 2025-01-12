@@ -60,7 +60,8 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     
     mockServer.close();
     setImmediate(function(){mockServer.emit('close')});
-
+console.log(">>>>>>>> HERE " + JSON.stringify(debug))
+process.exit(-1)
     // then
     expect(debug.allGood).toBe(true)
     expect(debug.timeTaken).toBeLessThanOrEqual(30)
