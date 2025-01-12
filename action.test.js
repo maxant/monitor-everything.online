@@ -15,7 +15,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     const baseUrl = 'http://' + host + ':' + port
 
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -38,7 +38,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
 
     // given BUILD_COMPLETED
     core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -61,7 +61,6 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     mockServer.close();
     setImmediate(function(){mockServer.emit('close')});
 console.log(">>>>>>>> HERE " + JSON.stringify(debug))
-process.exit(-1)
     // then
     expect(debug.allGood).toBe(true)
     expect(debug.timeTaken).toBeLessThanOrEqual(30)
@@ -79,7 +78,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
     const baseUrl = 'http://' + host + ':' + port
 
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -102,7 +101,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
 
     // given BUILD_COMPLETED
     core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -138,7 +137,7 @@ test('BUILD_COMPLETED but corrupt context file', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -161,7 +160,7 @@ test('BUILD_COMPLETED but missing context file', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -206,7 +205,7 @@ test('MEOE-003 Unknown command', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('UNKNOWN_COMMAND').mockReturnValueOnce('/tmp'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('UNKNOWN_COMMAND').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -220,4 +219,24 @@ test('MEOE-003 Unknown command', async () => {
     expect(core.setFailed.mock.calls.length).toBe(1)
     expect(core.setFailed.mock.calls[0].length).toBe(1)
     expect(core.setFailed.mock.calls[0][0]).toBe('MEOE-003 Unknown command UNKNOWN_COMMAND')
+})
+
+test('MEOE-006 missing deployment name', async () => {
+
+    // given
+    let core = {
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp'),
+        setOutput: jest.fn(),
+        setFailed: jest.fn(),
+    }
+    
+    // when
+    let debug = await exec(core)
+
+    // then
+    expect(debug.allGood).toBeFalsy()
+    expect(core.setOutput.mock.calls.length).toBe(0)
+    expect(core.setFailed.mock.calls.length).toBe(1)
+    expect(core.setFailed.mock.calls[0].length).toBe(1)
+    expect(core.setFailed.mock.calls[0][0]).toBe('MEOE-006 missing deploymentName')
 })
