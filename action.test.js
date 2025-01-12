@@ -72,7 +72,11 @@ console.log(">>>>>>>> HERE " + JSON.stringify(debug))
 
 test('BUILD_STARTED no folderToStoreStateIn provided', async () => {
 
-    fs.rmSync(".monitor-everything-online.json")
+    try {
+        fs.rmSync(".monitor-everything-online.json")
+    } catch(error) {
+        // ignore it
+    }
     try {
         let core = {
             getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED'),
