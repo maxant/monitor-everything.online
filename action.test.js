@@ -47,7 +47,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     let callToMockServer = ""
     const requestListener = function (req, res) {
         callToMockServer += req.method + " " + req.url
-        res.writeHead(200)
+        res.writeHead(201)
         res.end()
     }
     const mockServer = http.createServer(requestListener)
@@ -60,7 +60,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     
     mockServer.close();
     setImmediate(function(){mockServer.emit('close')});
-console.log(">>>>>>>> HERE " + JSON.stringify(debug))
+
     // then
     expect(debug.allGood).toBe(true)
     expect(debug.timeTaken).toBeLessThanOrEqual(30)

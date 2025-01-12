@@ -40,7 +40,7 @@ async function exec(core, baseUrl) {
                         let http = new httpm.HttpClient()
                         let url = `${baseUrl}/build-time/${deploymentName}?timeTaken=${timeTaken}`
                         let res = await http.post(url, null, {"authorization": token})
-                        if(res.message.statusCode === 200) {
+                        if(res.message.statusCode === 201) {
                             console.log(`Posted build time to ${baseUrl}`)
                             debug.allGood = true
                         } else {
