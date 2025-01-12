@@ -15,7 +15,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     const baseUrl = 'http://' + host + ':' + port
 
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -38,7 +38,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
 
     // given BUILD_COMPLETED
     core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -67,7 +67,7 @@ console.log(">>>>>>>> HERE " + JSON.stringify(debug))
     expect(debug.timeTaken).toBeGreaterThanOrEqual(0)
     expect(core.setOutput.mock.calls.length).toBe(0)
     expect(core.setFailed.mock.calls.length).toBe(0)
-    expect(callToMockServer).toMatch(new RegExp('^POST /build-time\\?timeTaken=[0-9]+$'))
+    expect(callToMockServer).toMatch(new RegExp('^POST /build-time/test-app\\?timeTaken=[0-9]+$'))
 })
 
 test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
@@ -78,7 +78,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
     const baseUrl = 'http://' + host + ':' + port
 
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_STARTED').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -101,7 +101,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
 
     // given BUILD_COMPLETED
     core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -137,7 +137,7 @@ test('BUILD_COMPLETED but corrupt context file', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -160,7 +160,7 @@ test('BUILD_COMPLETED but missing context file', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('BUILD_COMPLETED').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
@@ -205,7 +205,7 @@ test('MEOE-003 Unknown command', async () => {
 
     // given
     let core = {
-        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('UNKNOWN_COMMAND').mockReturnValueOnce('/tmp').mockReturnValueOnce('/test-app'),
+        getInput: jest.fn().mockReturnValueOnce('myToken').mockReturnValueOnce('UNKNOWN_COMMAND').mockReturnValueOnce('/tmp').mockReturnValueOnce('test-app'),
         setOutput: jest.fn(),
         setFailed: jest.fn(),
     }
