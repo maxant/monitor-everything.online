@@ -46,7 +46,8 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     // mock server
     let callToMockServer = ""
     const requestListener = function (req, res) {
-        callToMockServer += req.method + " " + req.url
+console.log(">>>> HERE " + JSON.stringify(req.headers))
+        callToMockServer += req.method + " " + req.url + " " + req.headers.authorization
         res.writeHead(201)
         res.end()
     }
@@ -67,7 +68,7 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     expect(debug.timeTaken).toBeGreaterThanOrEqual(0)
     expect(core.setOutput.mock.calls.length).toBe(0)
     expect(core.setFailed.mock.calls.length).toBe(0)
-    expect(callToMockServer).toMatch(new RegExp('^POST /build-time/test-app\\?timeTaken=[0-9]+$'))
+    expect(callToMockServer).toMatch(new RegExp('^POST /build-time/test-app\\?timeTaken=[0-9]+ myToken$'))
 })
 
 test('BUILD_STARTED no folderToStoreStateIn provided', async () => {

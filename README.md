@@ -32,7 +32,7 @@ second job runs. Use this input parameter to name a folder that survives jobs.
     steps:
 
       - name: record_start_of_build
-        uses: maxant/monitor-everything.online@v0.0.12
+        uses: maxant/monitor-everything.online@v0.0.14
         with:
           command: BUILD_STARTED
 
@@ -40,7 +40,7 @@ second job runs. Use this input parameter to name a folder that survives jobs.
 
       # final build step - record the time taken by the build
       - name: record_end_of_successful_build
-        uses: maxant/monitor-everything.online@v0.0.12
+        uses: maxant/monitor-everything.online@v0.0.14
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_COMPLETED

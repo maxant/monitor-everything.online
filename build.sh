@@ -1,5 +1,5 @@
 #!/bin/bash
-# call like this: ./build.sh "...commit message..." "v0.0.12"
+# call like this: ./build.sh "...commit message..." "v0.0.14"
 
 # fail completely if anything fails
 set -e
