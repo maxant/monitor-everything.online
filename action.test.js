@@ -238,5 +238,5 @@ test('MEOE-006 missing deployment name', async () => {
     expect(core.setOutput.mock.calls.length).toBe(0)
     expect(core.setFailed.mock.calls.length).toBe(1)
     expect(core.setFailed.mock.calls[0].length).toBe(1)
-    expect(core.setFailed.mock.calls[0][0]).toBe('MEOE-006 missing deploymentName')
+    expect(core.setFailed.mock.calls[0][0]).toBe('MEOE-006 Missing deploymentName')
 })
