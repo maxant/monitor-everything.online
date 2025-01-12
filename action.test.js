@@ -129,7 +129,7 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST', async () => {
     expect(core.setOutput.mock.calls.length).toBe(0)
     expect(core.setFailed.mock.calls.length).toBe(1)
     expect(core.setFailed.mock.calls[0].length).toBe(1)
-    expect(core.setFailed.mock.calls[0][0]).toMatch(new RegExp("^MEOE-005 Failed to POST build time to http://localhost:9996/build-time\\?timeTaken=[0-9]+, status code was 500, body was testing failure$"))
+    expect(core.setFailed.mock.calls[0][0]).toMatch(new RegExp("^MEOE-005 Failed to POST build time to http://localhost:9996/build-time/test-app\\?timeTaken=[0-9]+, status code was 500, body was testing failure$"))
     expect(callToMockServer).toMatch(new RegExp('^POST /build-time\\?timeTaken=[0-9]+$'))
 })
 
