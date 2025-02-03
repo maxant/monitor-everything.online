@@ -1,5 +1,6 @@
 const fs = require('fs')
 const httpm = require('@actions/http-client')
+const github = require('@actions/github');
 
 async function exec(core, baseUrl) {
     const debug = { allGood: false }
@@ -13,17 +14,37 @@ async function exec(core, baseUrl) {
         }
         console.log(`Running command '${command}'...`)
         if(command === "BUILD_STARTED") {
-            let now = new Date().getTime()
-            let ctx = { startTime: now }
-            let data = JSON.stringify(ctx)
-            fs.writeFileSync(contextFilename, data)
-            console.log(`Persisted startTime ${now}`)
-            debug.ctx = ctx
-            debug.allGood = true
-        } else if(command === "BUILD_COMPLETED") {
             const deploymentName = core.getInput('deploymentName')
             if(!deploymentName) {
                 setFailed(debug, core, "MEOE-006 Missing deploymentName")
+            } else {
+                let now = new Date().getTime()
+                let ctx = { startTime: now }
+                let data = JSON.stringify(ctx)
+                fs.writeFileSync(contextFilename, data)
+                console.log(`Persisted startTime ${now}`)
+                debug.ctx = ctx
+    
+                // post the commits so that the server can replicate them so that it always knows when development was started
+                let http = new httpm.HttpClient()
+console.log("GOT GITHUB CONTEXT PAYLOAD " + JSON.stringify(github.context.payload))
+                let ref = github.context.payload.event.ref
+                let repo = github.context.payload.event.repository.full_name
+                let commits = github.context.payload.event.commits
+                let url = `${baseUrl}/commits/${deploymentName}?repository=${repo}&ref=${ref}`
+                let res = await http.post(url, JSON.stringify(commits), {"authorization": token})
+                if(res.message.statusCode === 201) {
+                    console.log(`Posted commits to ${baseUrl}`)
+                    debug.allGood = true
+                } else {
+                    let body = await res.readBody()
+                    setFailed(debug, core, `MEOE-008 Failed to POST build time to ${url}, status code was ${res.message.statusCode}, body was ${body}`)
+                }
+            }
+        } else if(command === "BUILD_COMPLETED") {
+            const deploymentName = core.getInput('deploymentName')
+            if(!deploymentName) {
+                setFailed(debug, core, "MEOE-007 Missing deploymentName")
             } else {
                 if (fs.existsSync(contextFilename)) {
                     let now = new Date().getTime()

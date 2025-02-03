@@ -32,18 +32,22 @@ second job runs. Use this input parameter to name a folder that survives jobs.
     steps:
 
       - name: record_start_of_build
-        uses: maxant/monitor-everything.online@v0.0.14
+        uses: maxant/monitor-everything.online@v0.0.15
         with:
           command: BUILD_STARTED
+          folderToStoreStateIn: "/buildcache"
+          deploymentName: "yourDeploymentOrComponentOrApplicationName"
 
       - ... other build steps
 
       # final build step - record the time taken by the build
       - name: record_end_of_successful_build
-        uses: maxant/monitor-everything.online@v0.0.14
+        uses: maxant/monitor-everything.online@v0.0.15
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_COMPLETED
+          folderToStoreStateIn: "/buildcache"
+          deploymentName: "yourDeploymentOrComponentOrApplicationName"
 
 ```
 
@@ -53,4 +57,8 @@ second job runs. Use this input parameter to name a folder that survives jobs.
 
 - `MEOE-002 Missing context file ${contextFilename} - did you forget to run this action with the command 'BUILD_STARTED'?` - if this occurs, please ensure that you have called the action with the command 'BUILD_STARTED' in the same job as calling the action with the command 'BUILD_COMPLETED'.
 - `MEOE-003 Unknown command ${command}` - This happens if you are calling the action with an unknown command. Please read about the supported commands above in the "inputs" section.
-- `MEOE-004 General error: ${error.message}` - This indicates that a general erro rhas occurred. Please open an issue and describe how you use the action so that we can investigate the cause.
+- `MEOE-004 General error: ${error.message}` - This indicates that a general error has occurred. Please open an issue and describe how you use the action so that we can investigate the cause.
+- `MEOE-005 Failed to POST build time to url` - This indicates that there was an error uploading the build time. Please open an issue and describe how you use the action so that we can investigate the cause.
+- `MEOE-006 Missing deploymentName` - You need to add the `deploymentName` input paramter under the `with` block of the action for the BUILD_COMPLETED command.
+- `MEOE-007 Missing deploymentName` - You need to add the `deploymentName` input paramter under the `with` block of the action for the BUILD_STARTED command.
+- `MEOE-008 Failed to POST build time to url` - This indicates that there was an error uploading the commit IDs as part of the `BUILD_STARTED` command. Please open an issue and describe how you use the action so that we can investigate the cause.
