@@ -16,7 +16,7 @@ Update the README.md file to document the version and update the examples that u
 
 Then run:
 
-    ./build.sh "...commit message..." "v0.0.16"
+    ./build.sh "...commit message..." "v0.0.17"
 
 This will build, commit, tag and push.
 

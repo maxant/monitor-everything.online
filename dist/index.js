@@ -33,10 +33,10 @@ async function exec(core, baseUrl) {
     
                 // post the commits so that the server can replicate them so that it always knows when development was started
                 let http = new httpm.HttpClient()
-console.log("GOT GITHUB CONTEXT PAYLOAD " + JSON.stringify(github.context.payload))
-                let ref = github.context.payload.event.ref
-                let repo = github.context.payload.event.repository.full_name
-                let commits = github.context.payload.event.commits
+                // console.log("GOT GITHUB CONTEXT PAYLOAD " + JSON.stringify(github.context.payload))
+                let ref = github.context.payload.ref
+                let repo = github.context.payload.repository.full_name
+                let commits = github.context.payload.commits
                 let url = `${baseUrl}/commits/${deploymentName}?repository=${repo}&ref=${ref}`
                 let res = await http.post(url, JSON.stringify(commits), {"authorization": token})
                 if(res.message.statusCode === 201) {
