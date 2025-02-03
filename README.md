@@ -13,18 +13,21 @@ the action will result in an error, as it is not able to communicate securely wi
 
 **Required** The command to execute. Must be one of the following.
 
-- `BUILD_STARTED` - is used to record the time at which the build starts, and can be combined with `BUILD_COMPLETED` in order to monitor the time taken to execute a build for the application. Does not require the `token` input to be set.
+- `BUILD_STARTED` - is used to record the time at which the build starts, and can be combined with `BUILD_COMPLETED` in order to monitor the time taken to execute a build for the application. Requires the `token` and `deploymentName` 
+inputs to be set.
 
-- `BUILD_COMPLETED` - is used in conjunction with `BUILD_STARTED` and should be executed at the end of the build script, and uploads the time taken for the build to execute. Only call this when the build is successful, otherwise partial builds will negatively affect the recorded time. Requires that the `token` input is set.
-
-- `CHANGE_COMMITED` - is used to log that a change has been committed and is relevant for the Dora metric "lead time for changes" as it is used to measure the first commit on a branch (related to a change). Requires that the `token` input is set.
-
-- `CHANGE_DEPLOYED_TO_PROD` - is used to measure the number of deployments, but also to mark the end of a "lead time for change" measurement. Can be called multiple times for the same change, which simply causes the measured time to be extended. Requires that the `token` input is set.
+- `BUILD_COMPLETED` - is used in conjunction with `BUILD_STARTED` and should be executed at the end of the build script, and uploads the time taken for the build to execute. Only call this when the build is successful, otherwise partial builds will negatively affect the recorded time. Requires the `token` and `deploymentName` 
+inputs to be set.
 
 ### `folderToStoreStateIn`
 
 This action needs to store state in a file. That file needs to be present later during the job, and perhaps even when a
 second job runs. Use this input parameter to name a folder that survives jobs.
+
+### `deploymentName`
+
+This provides the name of the deployment, component or application that is being built. This is used to identify the build in the monitor-everything.online UI. Its value might typically be based on the project and repository names, 
+e.g. `myproject/myrepo` would have the deployment name `myproject-myrepo`.
 
 # Example usage
 
@@ -34,6 +37,7 @@ second job runs. Use this input parameter to name a folder that survives jobs.
       - name: record_start_of_build
         uses: maxant/monitor-everything.online@v0.0.15
         with:
+          token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_STARTED
           folderToStoreStateIn: "/buildcache"
           deploymentName: "yourDeploymentOrComponentOrApplicationName"

@@ -1,10 +1,10 @@
 #!/bin/bash
-# call like this: ./build.sh "...commit message..." "v0.0.15"
+# call like this: ./build.sh "...commit message..." "vN.O.P", replacing "N.O.P" with the actual version number
 
 # fail completely if anything fails
 set -e
 
-npm run test
+npm test
 
 ncc build index.js --license licenses.txt
 

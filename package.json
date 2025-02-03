@@ -1,6 +1,6 @@
 {
   "name": "monitor-everything.online",
-  "version": "1.0.0",
+  "version": "0.0.15",
   "main": "index.js",
   "scripts": {
     "test": "NODE_DEBUG=http jest || echo 'Failed. View coverage report at coverage/index.html'"

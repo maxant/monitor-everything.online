@@ -38,7 +38,7 @@ console.log("GOT GITHUB CONTEXT PAYLOAD " + JSON.stringify(github.context.payloa
                     debug.allGood = true
                 } else {
                     let body = await res.readBody()
-                    setFailed(debug, core, `MEOE-008 Failed to POST build time to ${url}, status code was ${res.message.statusCode}, body was ${body}`)
+                    setFailed(debug, core, `MEOE-008 Failed to POST commits to ${url}, status code was ${res.message.statusCode}, body was ${body}`)
                 }
             }
         } else if(command === "BUILD_COMPLETED") {
@@ -89,9 +89,3 @@ function setFailed(debug, core, msg) {
 }
 
 module.exports = exec
-
-
-// Get the JSON webhook payload for the event that triggered the workflow
-// const github = require('@actions/github')
-// const payload = JSON.stringify(github.context.payload, undefined, 2)
-// console.log(`The event payload: ${payload}`)
