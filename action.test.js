@@ -31,18 +31,16 @@ test('BUILD_STARTED and BUILD_COMPLETED', async () => {
     // set up github context
     github.context = {
             payload: {
-                event: {
-                    repository: {
-                        "full_name": 'test/app'
-                    },
-                    ref: 'refs/heads/test/app#0-some-branch-name',
-                    commits: [
-                        {
-                            id: 'a',
-                            timestamp: '2025-02-02T18:20:12+01:00',
-                        }
-                    ]
-                }
+                repository: {
+                    "full_name": 'test/app'
+                },
+                ref: 'refs/heads/test/app#0-some-branch-name',
+                commits: [
+                    {
+                        id: 'a',
+                        timestamp: '2025-02-02T18:20:12+01:00',
+                    }
+                ]
             }
         }
 
@@ -121,18 +119,16 @@ test('BUILD_STARTED no folderToStoreStateIn provided', async () => {
     // set up github context
     github.context = {
             payload: {
-                event: {
-                    repository: {
-                        "full_name": 'test/app'
-                    },
-                    ref: 'refs/heads/test/app#0-some-branch-name',
-                    commits: [
-                        {
-                            id: 'a',
-                            timestamp: '2025-02-02T18:20:12+01:00',
-                        }
-                    ]
-                }
+                repository: {
+                    "full_name": 'test/app'
+                },
+                ref: 'refs/heads/test/app#0-some-branch-name',
+                commits: [
+                    {
+                        id: 'a',
+                        timestamp: '2025-02-02T18:20:12+01:00',
+                    }
+                ]
             }
         }
 
@@ -204,18 +200,16 @@ test('BUILD_STARTED but bad POST on completed', async () => {
     // set up github context
     github.context = {
             payload: {
-                event: {
-                    repository: {
-                        "full_name": 'test/app'
-                    },
-                    ref: 'refs/heads/test/app#0-some-branch-name',
-                    commits: [
-                        {
-                            id: 'a',
-                            timestamp: '2025-02-02T18:20:12+01:00',
-                        }
-                    ]
-                }
+                repository: {
+                    "full_name": 'test/app'
+                },
+                ref: 'refs/heads/test/app#0-some-branch-name',
+                commits: [
+                    {
+                        id: 'a',
+                        timestamp: '2025-02-02T18:20:12+01:00',
+                    }
+                ]
             }
         }
 
@@ -269,18 +263,16 @@ test('BUILD_STARTED and BUILD_COMPLETED but bad POST on completed', async () => 
     // set up github context
     github.context = {
             payload: {
-                event: {
-                    repository: {
-                        "full_name": 'test/app'
-                    },
-                    ref: 'refs/heads/test/app#0-some-branch-name',
-                    commits: [
-                        {
-                            id: 'a',
-                            timestamp: '2025-02-02T18:20:12+01:00',
-                        }
-                    ]
-                }
+                repository: {
+                    "full_name": 'test/app'
+                },
+                ref: 'refs/heads/test/app#0-some-branch-name',
+                commits: [
+                    {
+                        id: 'a',
+                        timestamp: '2025-02-02T18:20:12+01:00',
+                    }
+                ]
             }
         }
 

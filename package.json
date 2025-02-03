@@ -3,7 +3,7 @@
   "version": "0.0.17",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_DEBUG=http jest || echo 'Failed. View coverage report at coverage/index.html'"
+    "test": "NODE_DEBUG=http jest || (echo 'Failed. View coverage report at coverage/index.html' && exit 1)"
   },
   "keywords": [],
   "author": "",
