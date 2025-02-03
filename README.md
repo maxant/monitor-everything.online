@@ -35,7 +35,7 @@ e.g. `myproject/myrepo` would have the deployment name `myproject-myrepo`.
     steps:
 
       - name: record_start_of_build
-        uses: maxant/monitor-everything.online@v0.0.17
+        uses: maxant/monitor-everything.online@v0.0.18
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_STARTED
@@ -46,7 +46,7 @@ e.g. `myproject/myrepo` would have the deployment name `myproject-myrepo`.
 
       # final build step - record the time taken by the build
       - name: record_end_of_successful_build
-        uses: maxant/monitor-everything.online@v0.0.17
+        uses: maxant/monitor-everything.online@v0.0.18
         with:
           token: ${{secrets.MONITOR_EVERYTHING_ONLINE_TOKEN}}
           command: BUILD_COMPLETED
